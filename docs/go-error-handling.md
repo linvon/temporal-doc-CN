@@ -3,7 +3,7 @@ id: go-error-handling
 title: Error Handling
 ---
 
-活动或子工作流程可能会失败，并且您可以根据不同的错误情况以不同的方式处理错误。
+活动或子工作流可能会失败，并且您可以根据不同的错误情况以不同的方式处理错误。
 
 如果活动返回`errors.New()`或`fmt.Errorf()`错误，则这些错误将转换为`*temporal.ApplicationError`并封装在`*temporal.ActivityTaskError`或`*temporal.ChildWorkflowExecutionError`中。
 

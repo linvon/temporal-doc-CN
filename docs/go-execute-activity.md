@@ -3,7 +3,7 @@ id: go-execute-activity
 title: Executing Activities
 ---
 
-工作流生效的主要职责是安排要执行的活动。最简单的方法是通过库方法`workflow.ExecuteActivity`。下面的示例代码演示了如何进行此调用：
+工作流执行的主要职责是安排要执行的活动。最简单的方法是通过库方法`workflow.ExecuteActivity`。下面的示例代码演示了如何进行此调用：
 
 ```go
 ao := workflow.ActivityOptions{
@@ -35,9 +35,9 @@ if err != nil {
 
 | Timeout                  | **描述**                                                     |
 | ------------------------ | ------------------------------------------------------------ |
-| `StartToCloseTimeout`    | 工作者收到任务后可以花费的最长时间。                         |
-| `ScheduleToStartTimeout` | 工作流安排任务后，活动工作者等待消费任务的时间。如果在指定的时间内没有可用于处理此任务的工作者，则该任务将超时。 |
-| `ScheduleToCloseTimeout` | 在工作流程安排任务之后，完成任务所花费的时间。这通常比`StartToClose`和`ScheduleToStart`超时的总和要大。 |
+| `StartToCloseTimeout`    |  Worker 收到任务后可以花费的最长时间。                         |
+| `ScheduleToStartTimeout` | 工作流安排任务后，活动 Worker 等待消费任务的时间。如果在指定的时间内没有可用于处理此任务的 Worker ，则该任务将超时。 |
+| `ScheduleToCloseTimeout` | 在工作流安排任务之后，完成任务所花费的时间。这通常比`StartToClose`和`ScheduleToStart`超时的总和要大。 |
 | `HeartbeatTimeout`       | 如果任务在此持续时间内未对 Temporal 服务发出心跳信号，则该任务将被视为失败。这对于长时间运行的任务很有用。 |
 
 ## ExecuteActivity 调用
@@ -70,6 +70,6 @@ default:
 }
 ```
 
-在此示例中，我们在`workflow.ExecuteActivity()`之后紧接着在返回的 Future 上调用了`Get()`方法。但是，这不是必需的。如果要并行执行多个活动，则可以重复调用`workflow.ExecuteActivity()`，存储返回的 Future，然后稍后通过调用Future的`Get()`方法来等待所有活动完成。
+在此示例中，我们在`workflow.ExecuteActivity()`之后紧接着在返回的 Future 上调用了`Get()`方法。但是这不是必需的。如果要并行执行多个活动，则可以重复调用`workflow.ExecuteActivity()`，存储返回的 Future，然后稍后通过调用 Future 的`Get()`方法来等待所有活动完成。
 
 要在返回的 Future 对象上实现更复杂的等待条件，请使用`workflow.Selector`类。

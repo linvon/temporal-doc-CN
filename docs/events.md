@@ -1,4 +1,7 @@
-# 事件
+---
+id: events
+title: Events
+---
 
 ## 事件处理
 

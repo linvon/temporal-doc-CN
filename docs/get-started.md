@@ -1,4 +1,8 @@
-## Temporal 文档
+---
+id: get-started
+title: Temporal documentation
+sidebar_label: Get started
+---
 
 Temporal 重新构想了具有状态依赖和服务编排等特性的应用程序开发。
 

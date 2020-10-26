@@ -1,4 +1,7 @@
-# 系统架构
+---
+id: system-architecture
+title: System architecture
+---
 
 ## 概述
 
@@ -12,7 +15,7 @@ Temporal 是一个高度可伸缩的，故障无感知的有状态的代码平�
 
 Temporal 的核心是高度可扩展的多租户服务。该服务通过强类型的 [Proto API](https://github.com/temporalio/temporal-proto/blob/master/workflowservice/service.proto) 暴露其所有功能。
 
-在内部，它依赖于持久性存储。当前开箱即用地支持 Apache Cassandra 和 MySQL 存储。要使用更复杂的格式列出工作流程，可以使用Elasticsearch 集群。 
+在内部，它依赖于持久性存储。当前开箱即用地支持 Apache Cassandra 和 MySQL 存储。要使用更复杂的格式列出工作流，可以使用Elasticsearch 集群。 
 
 Temporal 服务负责保持工作流状态和相关的持久化计时器。它维护内部队列（称为任务队列），其用于将任务分派给外部 Worker 。
 
@@ -28,7 +31,7 @@ Temporal 服务不会直接执行工作流代码。工作流代码由外部（�
 
 由于工作流代码在服务外部，因此可以用可以与服务 Thrift API 进行通讯的任何语言来实现。目前，Java 和 Go 客户端已准备就绪。Python 和 C＃客户端正在开发中。如果您有兴趣用您的首选语言为客户端提供贡献，请告诉我们。
 
-Temporal 服务 API 并不强加任何特定的工作流定义语言。因此特定的 Worker 可以被实现用来执行几乎所有现有的工作流程规范。Temporal 团队选择的开箱即用的模型基于持久化功能的思想。持久化的功能尽可能地接近应用程序业务逻辑，而只需要的很少的衔接代码。
+Temporal 服务 API 并不强加任何特定的工作流定义语言。因此特定的 Worker 可以被实现用来执行几乎所有现有的工作流规范。Temporal 团队选择的开箱即用的模型基于持久化功能的思想。持久化的功能尽可能地接近应用程序业务逻辑，而只需要的很少的衔接代码。
 
 ## 活动 Worker 
 

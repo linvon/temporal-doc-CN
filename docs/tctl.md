@@ -4,77 +4,74 @@ title: tctl (CLI)
 sidebar_label: tctl (CLI)
 ---
 
-The Temporal CLI is a command-line tool you can use to perform various tasks on a Temporal server. It can perform
-namespace operations such as register, update, and describe as well as workflow operations like start
-workflow, show workflow history, and signal workflow.
+Temporal CLI是一个命令行工具，可用于在 Temporal 服务上执行各种任务。它可以执行命名空间操作（例如注册、更新和描述）以及工作流操作（例如开始工作流、显示工作流历史记录和信号通知工作流）。
 
-## Using the CLI
+## 使用 CLI
 
-The Temporal CLI can be used directly from the Docker Hub image _temporalio/tctl_ or by building the CLI tool
-locally.
+可以从 Docker Hub 镜像 _temporalio/tctl_ 直接使用 Temporal CLI，也可以在本地编译CLI工具。
 
-Example of using the docker image to describe a namespace:
+使用 docker 映像描述命名空间的示例：
 
 ```
 docker run --rm temporalio/tctl:0.29.0 --namespace samples-namespace namespace describe
 ```
 
-On Docker versions 18.03 and later, you may get a "connection refused" error. You can work around this by setting the host to "host.docker.internal" (see [here](https://docs.docker.com/docker-for-mac/networking/#use-cases-and-workarounds) for more info).
+在Docker 18.03及更高版本上，您可能会收到“connection refused”错误。您可以通过将主机设置为“ host.docker.internal”来解决此问题（有关更多信息，请参见[此处](https://docs.docker.com/docker-for-mac/networking/#use-cases-and-workarounds)）。
 
 ```
 docker run --network=host --rm temporalio/tctl:0.29.0 --namespace samples-namespace namespace describe
 ```
 
-To build the CLI tool locally, clone the [Temporal server repo](https://github.com/temporalio/temporal) and run
-`make bins`. This produces an executable called `tctl`. With a local build, the same command to
-describe a namespace would look like this:
+要在本地构建CLI工具，请克隆[Temporal服务存储库](https://github.com/temporalio/temporal)并运行 `make bins`。这将产生一个名为的可执行文件`tctl`。在本地构建中，用于描述命名空间的相同命令如下所示：
 
 ```
 ./tctl --namespace samples-namespace namespace describe
 ```
 
-The example commands below will use `./tctl` for brevity.
+为了简洁起见，下面的示例命令将使用 `./tctl` 。
 
-## Environment variables
+## 环境变量
 
-Setting environment variables for repeated parameters can shorten the CLI commands.
+为重复的参数设置环境变量可以缩短 CLI 命令。
 
-- **TEMPORAL_CLI_ADDRESS** - host:port for Temporal frontend service, the default is for the local server
-- **TEMPORAL_CLI_NAMESPACE** - default workflow namespace, so you don't need to specify `--namespace`
+- **TEMPORAL_CLI_ADDRESS** - Temporal 前端服务的主机和端口 (默认: `127.0.0.1:7233`)
+- **TEMPORAL_CLI_NAMESPACE** - 工作流命名空间, 这样你就不用指定 `--namespace` (默认命名空间: `default`)
+- **TEMPORAL_CLI_TLS_CA** - 服务器证书颁发机构证书文件的路径
+- **TEMPORAL_CLI_TLS_CERT** - 公共x509证书文件的路径，用于相互 TLS 身份验证
+- **TEMPORAL_CLI_TLS_KEY** - 相互TLS身份验证的私钥文件的路径
 
 ## Quick Start
 
-Run `./tctl` for help on top level commands and global options
-Run `./tctl namespace` for help on namespace operations
-Run `./tctl workflow` for help on workflow operations
-Run `./tctl taskqueue` for help on task queue operations
-(`./tctl help`, `./tctl help [namespace|workflow]` will also print help messages)
+- 运行 `./tctl -h` 获取有关顶级命令和全局选项的帮助
+- 运行 `./tctl namespace -h` 获取有关命名空间操作的帮助
+- 运行 `./tctl workflow -h` 获取有关工作流操作的帮助
+- 运行 `./tctl taskqueue -h` 获取有关任务队列操作的帮助
 
-**Note:** make sure you have a Temporal server running before using CLI
+**注意：**使用 CLI 之前，请确保您已运行 Temporal 服务器
 
-### Namespace operation examples
+### 命名空间操作的例子
 
-- Register a new namespace named "samples-namespace":
+- 注册一个名为“ samples-namespace”的新命名空间：
 
 ```
-./tctl --namespace samples-namespace namespace register --global_namespace false
+./tctl --namespace samples-namespace namespace register
 # OR using short alias
-./tctl --ns samples-namespace n re --gd false
+./tctl --ns samples-namespace n re
 ```
 
-- View "samples-namespace" details:
+- 查看 "samples-namespace" 详细信息:
 
 ```
 ./tctl --namespace samples-namespace namespace describe
 ```
 
-### Workflow operation examples
+### 工作流操作的例子
 
-The following examples assume the TEMPORAL_CLI_NAMESPACE environment variable is set.
+以下示例假定设置了`TEMPORAL_CLI_NAMESPACE`环境变量。
 
-#### Run workflow
+#### 运行工作流
 
-Start a workflow and see its progress. This command doesn't finish until workflow completes.
+启动工作流并查看其进度。在工作流完成之前，该命令不会完成。
 
 ```
 ./tctl workflow run --tq hello-world --wt Workflow --et 60 -i '"temporal"'
@@ -83,27 +80,24 @@ Start a workflow and see its progress. This command doesn't finish until workflo
 ./tctl workflow run -h
 ```
 
-Brief explanation:
-To run a workflow, the user must specify the following:
+简要说明：要运行工作流，用户必须指定以下内容：
 
-1. Task queue name (--tq)
-2. Workflow type (--wt)
-3. Execution start to close timeout in seconds (--et)
-4. Input in JSON format (--i) (optional)
+1. 任务队列名称 (--tq)
+2. 工作流类型 (--wt)
+3. 以秒为单位的从执行开始到关闭的超时 (--et)
+4. 以 JSON 格式输入 (--i) (可选)
 
-example above uses [this sample workflow](https://github.com/temporalio/go-samples/blob/master/helloworld/helloworld.go)
-and takes a string as input with the `-i '"temporal"'` parameter. Single quotes (`''`) are used to wrap input as JSON.
+上面的示例使用[此示例工作流](https://github.com/temporalio/go-samples/blob/master/helloworld/helloworld.go) ，并使用字符串作为`-i '"temporal"'`参数的输入。单引号（`''`）用于将输入包装为 JSON。
 
-**Note:** You need to start the worker so that the workflow can make progress.
-(Run `make && ./bin/helloworld -m worker` in temporal-go-samples to start the worker)
+**注意：**您需要启动 Worker ，以便工作流可以运行。（在 temporal-go-samples 中运行`make && ./bin/helloworld -m worker`以启动 Worker ）
 
-#### Show running workers of a task queue
+#### 显示任务队列中正在运行的 Worker 
 
 ```
 ./tctl taskqueue desc --tq hello-world
 ```
 
-#### Start workflow
+#### 启动工作流
 
 ```
 ./tctl workflow start --tq hello-world --wt Workflow --et 60 -i '"temporal"'
@@ -111,39 +105,39 @@ and takes a string as input with the `-i '"temporal"'` parameter. Single quotes 
 # view help messages for workflow start
 ./tctl workflow start -h
 
-# for a workflow with multiple inputs, separate each json with space/newline like
-./tctl workflow start --tq hello-world --wt WorkflowWith3Args --et 60 -i '"your_input_string" 123 {"Name":"my-string", "Age":12345}'
+# for a workflow with multiple inputs, provide a separate -i flag for each of them
+./tctl workflow start --tq hello-world --wt WorkflowWith3Args --et 60 -i '"your_input_string"' -i 'null' -i '{"Name":"my-string", "Age":12345}'
 ```
 
-The workflow `start` command is similar to the `run` command, but immediately returns the workflow_id and
-run_id after starting the workflow. Use the `show` command to view the workflow's history/progress.
+工作流`start`命令与该`run`命令相似，但是在启动工作流后立即返回工作流 ID 和 run_id。使用`show`命令查看工作流的历史记录/进度。
 
-##### Reuse the same workflow id when starting/running a workflow
+##### 启动/运行工作流时重复使用相同的工作流 ID
 
-Use option `--workflowidreusepolicy` or `--wrp` to configure the workflow id reuse policy.
-**Option 0 AllowDuplicateFailedOnly:** Allow starting a workflow execution using the same workflow Id when a workflow with the same workflow Id is not already running and the last execution close state is one of _[terminated, cancelled, timedout, failed]_.
-**Option 1 AllowDuplicate:** Allow starting a workflow execution using the same workflow Id when a workflow with the same workflow Id is not already running.
-**Option 2 RejectDuplicate:** Do not allow starting a workflow execution using the same workflow Id as a previous workflow.
+使用选项`--workflowidreusepolicy`或`--wrp`配置工作流 ID 重用策略。
+
+**选项0 AllowDuplicateFailedOnly：**当具有相同工作流 ID 的工作流尚未运行且上次执行关闭状态为*[终止，取消，超时，失败]中的*一种时，允许使用相同的工作流 ID 启动工作流执行。
+
+**选项1 AllowDuplicate：**当具有相同工作流 ID 的工作流尚未运行时，允许使用相同的工作流 ID 启动工作流执行。
+
+**选项2 RejectDuplicate：**不允许使用与以前的工作流相同的工作流 ID 开始执行工作流。
 
 ```
-# use AllowDuplicateFailedOnly option to start a workflow
-./tctl workflow start --tq hello-world --wt Workflow --et 60 -i '"temporal"' --wid "<duplicated workflow id>" --wrp 0
+# use AllowDuplicateFailedOnly option to start a Workflow
+./tctl workflow start --tq hello-world --wt Workflow --et 60 -i '"temporal"' --wid "<duplicated workflow id>" --wrp AllowDuplicateFailedOnly
 
 # use AllowDuplicate option to run a workflow
-./tctl workflow run --tq hello-world --wt Workflow --et 60 -i '"temporal"' --wid "<duplicated workflow id>" --wrp 1
+./tctl workflow run --tq hello-world --wt Workflow --et 60 -i '"temporal"' --wid "<duplicated workflow id>" --wrp AllowDuplicate
 ```
 
-##### Start a workflow with a memo
+##### 启动带有备忘录的工作流
 
-Memos are immutable key/value pairs that can be attached to a workflow run when starting the workflow. These are
-visible when listing workflows. More information on memos can be found
-[here](/docs/filter-workflows/#memo-vs-search-attributes).
+备注是不可变的键/值对，可以在启动工作流时将其附加到工作流中。列出工作流时这些也是可见的。有关备忘的更多信息，请参见 [此处](https://docs.temporal.io/docs/filter-workflows/#memo-vs-search-attributes)。
 
 ```
 tctl wf start -tq hello-world -wt Workflow -et 60 -i '"temporal"' -memo_key ‘“Service” “Env” “Instance”’ -memo ‘“serverName1” “test” 5’
 ```
 
-#### Show workflow history
+#### 显示工作流历史记录
 
 ```
 ./tctl workflow show -w 3ea6b242-b23c-4279-bb13-f215661b4717 -r 866ae14c-88cf-4f1e-980f-571e031d71b0
@@ -156,7 +150,7 @@ tctl wf start -tq hello-world -wt Workflow -et 60 -i '"temporal"' -memo_key ‘�
 ./tctl workflow showid 3ea6b242-b23c-4279-bb13-f215661b4717
 ```
 
-#### Show workflow execution information
+#### 显示工作流执行信息
 
 ```
 ./tctl workflow describe -w 3ea6b242-b23c-4279-bb13-f215661b4717 -r 866ae14c-88cf-4f1e-980f-571e031d71b0
@@ -169,7 +163,7 @@ tctl wf start -tq hello-world -wt Workflow -et 60 -i '"temporal"' -memo_key ‘�
 ./tctl workflow describeid 3ea6b242-b23c-4279-bb13-f215661b4717
 ```
 
-#### List closed or open workflow executions
+#### 列出关闭或打开的工作流执行
 
 ```
 ./tctl workflow list
@@ -178,15 +172,15 @@ tctl wf start -tq hello-world -wt Workflow -et 60 -i '"temporal"' -memo_key ‘�
 ./tctl workflow list -m
 ```
 
-Use **--query** to list workflows with SQL like query:
+使用**--query**可以使用类似SQL查询的方式列出工作流：
 
 ```
 ./tctl workflow list --query "WorkflowType='main.SampleParentWorkflow' AND CloseTime = missing "
 ```
 
-This will return all open workflows with workflowType as "main.SampleParentWorkflow".
+这将返回所有打开的工作流，其工作流类型为 "main.SampleParentWorkflow"。
 
-#### Query workflow execution
+#### 查询工作流执行
 
 ```
 # use custom query type
@@ -198,7 +192,7 @@ This will return all open workflows with workflowType as "main.SampleParentWorkf
 ./tctl workflow stack -w <wid> -r <rid>
 ```
 
-#### Signal, cancel, terminate workflow
+#### 信号、取消、终止工作流
 
 ```
 # signal
@@ -211,18 +205,16 @@ This will return all open workflows with workflowType as "main.SampleParentWorkf
 ./tctl workflow terminate -w <wid> -r <rid> --reason
 ```
 
-Terminating a running workflow execution will record a WorkflowExecutionTerminated event as the closing event in the history. No more decision tasks will be scheduled for a terminated workflow execution.
-Canceling a running workflow execution will record a WorkflowExecutionCancelRequested event in the history, and a new decision task will be scheduled. The workflow has a chance to do some clean up work after cancellation.
+终止正在运行的工作流执行将在历史记录中将 WorkflowExecutionTerminated 事件记录为关闭事件。终止执行的工作流不再调度决策任务。取消正在运行的工作流执行，将在历史记录中记录 WorkflowExecutionCancelRequested 事件，并调度新的决策任务。取消后，工作流有机会进行一些清理工作。
 
-#### Signal, cancel, terminate workflows as a batch job
+#### 批量信号、取消、终止工作流
 
-Batch job is based on List Workflow Query(**--query**). It supports signal, cancel and terminate as batch job type.
-For terminating workflows as batch job, it will terminte the children recursively.
+批处理作业基于列出工作流查询（**--query**）。它支持信号、取消和终止作为批处理作业类型。对于终止工作流的批处理作业，它将递归终止子工作流。
 
-Start a batch job(using signal as batch type):
+启动批处理作业（使用信号作为批处理类型）:
 
 ```
-tctl --ns samples-namespace wf batch start --query "WorkflowType='main.SampleParentWorkflow' AND CloseTime=missing" --reason "test" --bt signal --sig testname
+tctl --ns samples-namespace batch start --query "WorkflowType='main.SampleParentWorkflow' AND CloseTime=missing" --reason "test" --bt signal --sig testname
 This batch job will be operating on 5 workflows.
 Please confirm[Yes/No]:yes
 {
@@ -232,70 +224,71 @@ Please confirm[Yes/No]:yes
 
 ```
 
-You need to remember the JobId or use List command to get all your batch jobs:
+您需要记住 JobId 或使用 List 命令来获取所有批处理作业：
 
 ```
-tctl --ns samples-namespace wf batch list
+tctl --ns samples-namespace batch list
 ```
 
-Describe the progress of a batch job:
+描述批处理作业的进度：
 
 ```
-tctl --ns samples-namespace wf batch desc -jid <batch-job-id>
+tctl --ns samples-namespace batch desc -jid <batch-job-id>
 ```
 
-Terminate a batch job:
+终止批处理作业：
 
 ```
-tctl --ns samples-namespace wf batch terminate -jid <batch-job-id>
+tctl --ns samples-namespace batch terminate -jid <batch-job-id>
 ```
 
-Note that the operation performed by a batch will not be rolled back by terminating the batch. However, you can use reset to rollback your workflows.
+注意，批处理执行的操作不会通过终止该批处理而回滚。但是，您可以使用 reset 来回滚您的工作流。
 
-#### Restart, reset workflow
+#### 重新启动、重置工作流
 
-The Reset command allows resetting a workflow to a particular point and continue running from there.
-There are a lot of use cases:
+使用“重置”命令可以将工作流重置到特定点并从那里继续运行。
 
-- Rerun a failed workflow from the beginning with the same start parameters.
-- Rerun a failed workflow from the failing point without losing the achieved progress(history).
-- After deploying new code, reset an open workflow to let the workflow run to different flows.
+有很多使用场景：
 
-You can reset to some predefined event types:
+- 从头开始使用相同的启动参数重新运行失败的工作流。
+- 从故障点重新运行失败的工作流，而不会丢失已实现的进度（历史）。
+- 部署新代码后，重置打开的工作流以使工作流运行到不同的流程。
+
+您可以重置为一些预定义的事件类型：
 
 ```
 ./tctl workflow reset -w <wid> -r <rid> --reset_type <reset_type> --reason "some_reason"
 ```
 
-- FirstDecisionCompleted: reset to the beginning of the history.
-- LastDecisionCompleted: reset to the end of the history.
-- LastContinuedAsNew: reset to the end of the history for the previous run.
+- FirstDecisionCompleted: 重置到历史记录的开头。
+- LastDecisionCompleted: 重置到历史记录的末尾。
+- LastContinuedAsNew: 重置到上一次运行的历史记录的末尾。
 
-If you are familiar with the Temporal history event, You can also reset to any decision finish event by using:
+如果您熟悉 Temporal 历史事件，则还可以使用以下方法将其重置为任何决策完成事件：
 
 ```
 ./tctl workflow reset -w <wid> -r <rid> --event_id <decision_finish_event_id> --reason "some_reason"
 ```
 
-Some things to note:
+注意事项：
 
-- When reset, a new run will be kicked off with the same workflowId. But if there is a running execution for the workflow(workflowId), the current run will be terminated.
-- decision_finish_event_id is the Id of events of the type: DecisionTaskComplete/DecisionTaskFailed/DecisionTaskTimeout.
-- To restart a workflow from the beginning, reset to the first decision task finish event.
+- 重置后，将使用相同的工作流编号开始新的运行。但是如果工作流（workflowId）正在运行，则当前运行将终止。
+- Decision_finish_event_id 是以下类型的事件的ID：DecisionTaskComplete / DecisionTaskFailed / DecisionTaskTimeout。
+- 要从头开始重新启动工作流，请重置为第一个决策任务完成事件。
 
-To reset multiple workflows, you can use batch reset command:
+要重置多个工作流，可以使用批重置命令：
 
 ```
 ./tctl workflow reset-batch --input_file <file_of_workflows_to_reset> --reset_type <reset_type> --reason "some_reason"
 ```
 
-#### Recovery from bad deployment -- auto-reset workflow
+#### 从不良部署中恢复-自动重置工作流
 
-If a bad deployment lets a workflow run into a wrong state, you might want to reset the workflow to the point that the bad deployment started to run. But usually it is not easy to find out all the workflows impacted, and every reset point for each workflow. In this case, auto-reset will automatically reset all the workflows given a bad deployment identifier.
+如果不良部署使工作流进入错误状态，则您可能需要将工作流重置为不良部署开始运行的时刻。但是通常很难找出所有受影响的工作流以及每个工作流的每个重置点。在这种情况下，自动重置将在给定错误的部署标识符的情况下自动重置所有工作流。
 
-Let's get familiar with some concepts. Each deployment will have an identifier, we call it "**Binary Checksum**" as it is usually generated by the md5sum of a binary file. For a workflow, each binary checksum will be associated with an **auto-reset point**, which contains a **runId**, an **eventID**, and the **created_time** that binary/deployment made the first decision for the workflow.
+让我们熟悉一些概念。每个部署都有一个标识符，我们称其为“ **Binary Checksum** ”，因为它通常是由二进制文件的md5sum生成的。对于一个工作流，每个二进制的校验和将关联一个**自动复位点**，其中包含一个 **runid**，一个 **eventID **和二进制/部署生成工作流中的第一个决定的**创建时间**。
 
-To find out which **binary checksum** of the bad deployment to reset, you should be aware of at least one workflow running into a bad state. Use the describe command with **--reset_points_only** option to show all the reset points:
+为了找出要重置不良部署的**二进制校验和**，您应该知道至少有一个工作流处于不良状态。使用带**--reset_points_only **选项的 describe 命令可显示所有重置点：
 
 ```
 ./tctl wf desc -w <WorkflowId>  --reset_points_only
@@ -308,10 +301,22 @@ To find out which **binary checksum** of the bad deployment to reset, you should
 ...
 ```
 
-Then use this command to tell Temporal to auto-reset all workflows impacted by the bad deployment. The command will store the bad binary checksum into namespace info and trigger a process to reset all your workflows.
+然后使用此命令告诉 Temporal 自动重置受不良部署影响的所有工作流。该命令会将错误的二进制校验和存储到命名空间信息中，并触发重置所有工作流的进程。
 
 ```
 ./tctl --ns <YourNamespace> namespace update --add_bad_binary aae748fdc557a3f873adbe1dd066713f  --reason "rollback bad deployment"
 ```
 
-As you add the bad binary checksum to your namespace, Temporal will not dispatch any decision tasks to the bad binary. So make sure that you have rolled back to a good deployment(or roll out new bits with bug fixes). Otherwise your workflow can't make any progress after auto-reset.
+在将错误的二进制校验和添加到命名空间时，Temporal 将不会将任何决策任务分派到错误的二进制文件。因此，请确保您已回滚到良好的部署（或使用错误修复来推出新的组件）。否则，自动重置后您的工作流将无法取得任何进展。
+
+#### 安全连接到 Temporal 集群
+
+`tctl` 支持可选的Transport Level Security（TLS），用于与 Temporal 安全通信，服务器身份验证和客户端身份验证（相互TLS）。
+
+`--tls_ca_path=<certificate file path>`命令行参数为`tctl`正在连接的验证服务器传递证书颁发机构（CA）证书。
+
+`--tls_cert_path=<certificate file path>`命令行参数为服务器传递证书以验证客户端（`tctl`）身份。同时`--tls_key_path`也需提供。
+
+`--tls_key_path=<private key file path>`传递用于与服务器安全通信的私钥的命令行参数。同时`--tls_key_path`也需提供。
+
+TLS命令行参数可以通过各自的环境变量提供，以缩短命令行。

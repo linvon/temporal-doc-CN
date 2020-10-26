@@ -1,4 +1,9 @@
-# 工作流
+---
+id: workflows
+title: Workflows
+sidebar_label: Workflows
+description: Temporal core abstraction is a fault-oblivious stateful Workflow. The state of the Workflow code, including local variables and threads it creates, is immune to process and Temporal service failures.
+---
 
 ## 概述
 
@@ -12,7 +17,7 @@ Temporal 的核心抽象是一个**故障无感知的有状态的工作流**。�
 
 一种方法是围绕数据库来展开。应用程序进程将定期扫描数据库表中处于特定状态的客户，执行必要的操作，并更新其状态以反映该状态。尽管这个方法是可行的，但是该方法具有很多缺点。最明显的是客户状态的状态机很快会变得极为复杂。例如从信用卡充值或发送电子邮件可能会由于下游系统不可用而失败。失败的调用可能需要长时间的重试，同时最好使用指数增长的重试策略。调用频率应该被限制以免外部系统过载。如果由于某种原因而无法处理单个客户的记录，则应该支持放弃任务以避免阻塞整个过程。基于数据库的方法通常也存在性能问题。
 
-另一种常用的方法是使用计时器服务和队列。任何更新都将推送到队列，然后从中消费数据的工作程序将更新数据库，并可能在下游队列中推送更多消息。对于需要调度的操作可以使用外部计时器服务。这种方法通常有更好的可扩展性，因为数据库不会不断地轮询更改。但这使编程模型更加复杂且容易出错，因为通常在队列系统和数据库之间没有事务级别的更新。
+另一种常用的方法是使用计时器服务和队列。任何更新都将推送到队列，然后从中消费数据的 Worker 将更新数据库，并可能在下游队列中推送更多消息。对于需要调度的操作可以使用外部计时器服务。这种方法通常有更好的可扩展性，因为数据库不会不断地轮询更改。但这使编程模型更加复杂且容易出错，因为通常在队列系统和数据库之间没有事务级别的更新。
 
 使用 Temporal 可以将整个逻辑封装在一个简单的持久化函数中，该函数直接实现业务逻辑。由于该函数是有状态的，因此实现者无需使用任何其他系统来确保耐用性和容错能力。
 
@@ -58,7 +63,7 @@ Temporal 实际上对打开的工作流实例的数量没有可伸缩性限制�
 
 开发人员在学习 Temporal 时提出的常见问题是“如何处理我的工作流中的 Worker 进程失败/重新启动”？答案是你不需要。**工作流代码完全不关心 Worker 的任何故障和停机时间，甚至都不关心 Temporal 服务本身**。一旦它们被恢复并且工作流需要处理某些事件（例如计时器或活动完成），工作流就会完全恢复当时的状态并且继续执行。工作流失败的唯一原因是工作流业务代码引发异常，而不是基础架构宕机。
 
-另一个常见问题是工作人员是否可以处理比其缓存大小或支持的线程数更多的工作流实例。答案是处于阻塞状态的工作流可以安全地从 Worker 中删除。之后如果需要（以外部事件的形式）时，可以在其他或相同的 Worker 上重新调用它。因此如果一个 Worker 性能足够，则它可以处理数百万个打开的工作流。
+另一个常见问题是 Worker 是否可以处理比其缓存大小或支持的线程数更多的工作流实例。答案是处于阻塞状态的工作流可以安全地从 Worker 中删除。之后如果需要（以外部事件的形式）时，可以在其他或相同的 Worker 上重新调用它。因此如果一个 Worker 性能足够，则它可以处理数百万个打开的工作流。
 
 ## 状态恢复与决定论
 
@@ -66,7 +71,7 @@ Temporal 实际上对打开的工作流实例的数量没有可伸缩性限制�
 
 要了解 Temporal  执行模型以及恢复机制，请观看以下视频。涵盖恢复部分的动画从 15:50 开始。
 
-<iframe width="807" height="454" src="https://www.youtube.com/embed/qce_AqCkFys" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![](https://res.cloudinary.com/marcomontalbano/image/upload/v1603718194/video_to_markdown/images/youtube--qce_AqCkFys-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/embed/qce_AqCkFys "")
 
 ## ID 唯一性
 

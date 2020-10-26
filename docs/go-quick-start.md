@@ -125,7 +125,7 @@ func Greetings(ctx workflow.Context) error {
 }
 ```
 
-## 在工作者中绑定工作流和活动
+## 在 Worker 中绑定工作流和活动
 
 创建文件 main.go
 
@@ -161,9 +161,9 @@ func main() {
 }
 ```
 
-## 启动工作者
+## 启动 Worker 
 
-运行承载工作流程和活动实现的工作程序应用
+运行承载工作流和活动实现的 Worker 应用
 
 ```bash
 > go run *.go
@@ -179,7 +179,7 @@ func main() {
 Started Workflow Id: Greet_Temporal_1, run Id: 2666b82a-c706-45e2-8d8e-ae84a5b4e892
 ```
 
-## 工作流程完成执行
+## 工作流完成执行
 
 ```
 2020/07/31 16:08:09 INFO  Workflow Greetings started Namespace default TaskQueue tutorial_tq WorkerID 56116@local@ WorkflowType Greetings WorkflowID Greet_Temporal_1 RunID 2666b82a-c706-45e2-8d8e-ae84a5b4e892

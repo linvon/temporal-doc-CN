@@ -11,15 +11,15 @@ tags: helloworld, go, sdk, tutorial
 
 - 了解如何设置 Temporal  Go应用程序项目。
 - 更加熟悉核心概念和应用程序结构。
-- 从零开始使用[ Temporal  Go SDK](https://github.com/ Temporal io/sdk-go)构建并测试一个简单的“ Hello World！”  Temporal  Workflow应用程序。
+- 从零开始使用[ Temporal  Go SDK](https://github.com/Temporalio/sdk-go)构建并测试一个简单的“ Hello World！”  Temporal  Workflow应用程序。
 
-<img class="docs-image-centered" src={require('../static/img/docs/hello.png').default} />
+![](../img/docs/hello.png)
 
-本教程重点介绍从头开始构建应用程序的实战。为了更好地理解*为什么*应该使用 Temporal ，我们建议您阅读本教程[运行一个 Temporal 汇款应用程序](https://docs. Temporal .io/docs/go-run-your-first-app)以了解其特性。
+本教程重点介绍从头开始构建应用程序的实战。为了更好地理解*为什么*应该使用 Temporal ，我们建议您阅读本教程[运行一个 Temporal 汇款应用程序](https://docs.Temporal.io/docs/go-run-your-first-app)以了解其特性。
 
-所有教程中的代码都可在此仓库中获得 [hello-world Go template repository](https://github.com/ Temporal io/hello-world-project-template-go).
+所有教程中的代码都可在此仓库中获得 [hello-world Go template repository](https://github.com/Temporalio/hello-world-project-template-go).
 
-## ![](/img/docs/harbor-crane.png) &nbsp;&nbsp;  Go 项目基本框架
+## ![](../img/docs/harbor-crane.png) &nbsp;&nbsp;  Go 项目基本框架
 
 在开始之前，请确保您已阅读本教程的[准备条件](https://docs.  Temporal  .io/docs/go-sdk-tutorial-prerequisites)。
 
@@ -37,7 +37,7 @@ go mod init hello-world-project/app
 go get go.temporal.io/sdk@latest
 ```
 
-## ![](/img/docs/apps.png) &nbsp;&nbsp; "Hello World!" 应用
+## ![](../img/docs/apps.png) &nbsp;&nbsp; "Hello World!" 应用
 
 现在，我们准备构建 Temporal 工作流应用程序。我们的应用程序将包括四个部分：
 
@@ -106,7 +106,7 @@ const GreetingTaskQueue = "GREETING_TASK_QUEUE"
 
 ###  Worker 
 
-我们的 Worker 托管工作流和活动函数并一起执行它们一次。通过从任务队列中提取信息，指示工作程序执行特定函数。运行代码后，它将结果传递回服务。
+我们的 Worker 托管工作流和活动函数并一起执行它们一次。通过从任务队列中提取信息，指示 Worker 执行特定函数。运行代码后，它将结果传递回服务。
 
 创建  Worker /main.go 并添加以下代码：
 
@@ -190,7 +190,7 @@ func printResults(greeting string, workflowID, runID string) {
 }
 ```
 
-##  ![](/img/docs/check.png) &nbsp;测试应用程序
+##  ![](../img/docs/check.png) &nbsp;测试应用程序
 
 让我们向应用程序中添加一个简单的单元测试，以确保一切正常。创建 workflow_test.go 并添加以下代码：
 
@@ -226,9 +226,9 @@ func Test_Workflow(t *testing.T) {
 go test
 ```
 
-## ![](/img/docs/running.png) &nbsp;运行应用程序
+## ![](../img/docs/running.png) &nbsp;运行应用程序
 
-要运行该应用程序，我们需要启动工作流和工作程序。您可以以任何顺序启动它们，但必须在单独的终端窗口中运行每个命令。
+要运行该应用程序，我们需要启动工作流和 Worker 。您可以以任何顺序启动它们，但必须在单独的终端窗口中运行每个命令。
 
 要启动 Worker ，请从项目根目录运行以下命令：
 
@@ -242,26 +242,26 @@ go run  Worker /main.go
 go run start/main.go
 ```
 
-<img class="docs-image-centered docs-image-max-width-20" src={require('../static/img/docs/confetti.png').default} />
+![](../img/docs/confetti.png)
 
 **恭喜，**您已经成功从头开始构建了 Temporal 应用程序！
 
-## ![](/img/docs/wisdom.png) &nbsp;回顾检查
+## ![](../img/docs/wisdom.png) &nbsp;回顾检查
 
 做得好！您现在知道了如何使用Go SDK来构建 Temporal  Workflow应用程序。让我们进行快速回顾，以确保您记得更重要的部分。
 
-![One](/img/docs/one.png) &nbsp;** Temporal 工作流应用程序的最少四个组成是什么？**
+![One](../img/docs/one.png) &nbsp;** Temporal 工作流应用程序的最少四个组成是什么？**
 
 1. 活动函数。
 2. 工作流函数。
 3. 一个用于承载“活动”和“工作流”代码的 Worker 。
 4. 用于启动工作流的前端。
 
-![Two](/img/docs/two.png) &nbsp;** Temporal 服务如何向 Worker 获取信息？**
+![Two](../img/docs/two.png) &nbsp;** Temporal 服务如何向 Worker 获取信息？**
 
 它将信息添加到任务队列。
 
-![Three](/img/docs/three.png) &nbsp;**对或错？ Temporal 活动和工作流函数只是普通的Go函数？**
+![Three](../img/docs/three.png) &nbsp;**对或错？ Temporal 活动和工作流函数只是普通的Go函数？**
 
 对
 

@@ -3,18 +3,16 @@ id: go-distributed-cron
 title: Distributed CRON
 ---
 
-将任何 Temporal 工作流程转换为 Cron 工作流程相对简单。您需要做的就是在启动工作流程时使用[StartWorkflowOptions](https://pkg.go.dev/go.temporal.io/sdk/internal#StartWorkflowOptions)的 CronSchedule 参数提供cron计划 。
+将任何 Temporal 工作流转换为 Cron 工作流非常简单。您需要做的就是在启动工作流时使用 [StartWorkflowOptions](https://pkg.go.dev/go.temporal.io/sdk/internal#StartWorkflowOptions) 的 CronSchedule 参数提供 cron 计划 。
 
-您也可以使用 Temporal CLI 携带使用`--cron`参数的可选cron作业来启动工作流程。
-
-You can also start a workflow using the Temporal CLI with an optional cron schedule using the `--cron` argument.
+您还可以使用 Temporal CLI 启动工作流，并使用可选的`--cron`参数使用 cron 作业。 
 
 对于使用 CronSchedule 的工作流：
 
-* Cron作业基于UTC时间。例如，cron作业“ 15 8 * * * ”将每天在世界标准时间上午8:15运行。
-* 如果工作流失败并且 StartWorkflowOptions 也提供了 RetryPolicy，则工作流将基于 RetryPolicy 重试。重试工作流程时，服务器不会安排下一次 cron 运行。
-* Temporal 服务仅在当前运行完成后才调度下一个cron运行。如果在工作流正在运行（或重试）时下一个计划到期，则它将跳过该计划。
-* Cron工作流程直到终止或取消后才会停止。
+* Cron 作业基于 UTC 时间。例如，cron 作业“ 15 8 * * * ”将每天在世界标准时间上午8:15运行。
+* 如果工作流失败并且 StartWorkflowOptions 也提供了 RetryPolicy，则工作流将基于 RetryPolicy 重试。重试工作流时，服务器不会安排下一次 cron 运行。
+* Temporal 服务仅在当前运行完成后才调度下一个 cron 运行。如果在工作流正在运行（或重试）时下一个计划到期，则它将跳过该计划。
+* Cron 工作流直到终止或取消后才会停止。
 
 Temporal 支持标准 cron 规范:
 
@@ -41,9 +39,9 @@ CronSchedule string
 
 ## 转换现有的 cron 工作流
 
-在可使用 CronSchedule 之前，实现 cron 工作流程的老方法是将延迟计时器用作最后一步，然后返回 `ContinueAsNew`。该实现的一个问题是，如果工作流失败或超时，则 cron 将停止。
+在可使用 CronSchedule 之前，实现 cron 工作流的老方法是将延迟计时器用作最后一步，然后返回 `ContinueAsNew`。该实现的一个问题是，如果工作流失败或超时，则 cron 将停止。
 
-要将这些工作流程转换为使用 Temporal CronSchedule，您所需要做的就是删除延迟计时器，然后不使用而返回 `ContinueAsNew`。然后使用所需的CronSchedule 启动工作流程。 
+要将这些工作流转换为使用 Temporal CronSchedule，您所需要做的就是删除延迟计时器，然后不使用而返回 `ContinueAsNew`。然后使用所需的CronSchedule 启动工作流。 
 
 ## 检索最后的成功结果
 
@@ -72,4 +70,4 @@ func CronWorkflow(ctx workflow.Context) (CronResult, error) {
 }
 ```
 
-请注意，即使其中一个 cron 计划运行失败，此操作也有效。如果下一个计划至少成功完成一次，它将仍然获得最后一个成功的结果。例如，对于日常cron工作流程，如果第一天运行成功而第二天运行失败，则第三天运行仍将使用这些 API 从第一天运行中获取结果。
+请注意，即使其中一个 cron 计划运行失败，此操作也有效。如果下一个计划至少成功完成一次，它将仍然获得最后一个成功的结果。例如，对于日常cron工作流，如果第一天运行成功而第二天运行失败，则第三天运行仍将使用这些 API 从第一天运行中获取结果。

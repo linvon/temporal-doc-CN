@@ -166,7 +166,7 @@ map[string]interface{}{
 }
 ```
 
-当前不支持删除字段。为了获得类似的效果，请将字段设置为前哨值。例如，要删除“ CustomKeywordField”，请将其更新为“ impossibleVal”。然后搜索`CustomKeywordField != ‘impossibleVal’`将匹配CustomKeywordField不等于“ impossibleVal”的工作流程，其中**包括**未设置 CustomKeywordField 的工作流程。
+当前不支持删除字段。为了获得类似的效果，请将字段设置为前哨值。例如，要删除“ CustomKeywordField”，请将其更新为“ impossibleVal”。然后搜索`CustomKeywordField != ‘impossibleVal’`将匹配CustomKeywordField不等于“ impossibleVal”的工作流，其中**包括**未设置 CustomKeywordField 的工作流。
 
 使用`workflow.GetInfo`来获得当前的搜索属性。
 
@@ -176,7 +176,7 @@ map[string]interface{}{
 
 ##  查询功能
 
-通过[CLI列出工作流](https://docs.temporal.io/docs/tctl/#list-closed-or-open-workflow-executions)时，可以使用类似 SQL 的 where 子句查询工作流程，也可以使用列表API（[Go](https://pkg.go.dev/go.temporal.io/sdk/client#Client)，[Java](https://static.javadoc.io/com.uber.cadence/cadence-client/2.6.0/com/uber/cadence/WorkflowService.Iface.html#ListWorkflowExecutions-com.uber.cadence.ListWorkflowExecutionsRequest-)）来查询工作流。
+通过[CLI列出工作流](https://docs.temporal.io/docs/tctl/#list-closed-or-open-workflow-executions)时，可以使用类似 SQL 的 where 子句查询工作流，也可以使用列表API（[Go](https://pkg.go.dev/go.temporal.io/sdk/client#Client)，[Java](https://static.javadoc.io/com.uber.cadence/cadence-client/2.6.0/com/uber/cadence/WorkflowService.Iface.html#ListWorkflowExecutions-com.uber.cadence.ListWorkflowExecutionsRequest-)）来查询工作流。
 
 请注意，查询时您只会看到来自一个命名空间的工作流。
 
@@ -225,11 +225,11 @@ map[string]interface{}{
   - 7 = timedout
 - StartTime, CloseTime 和 ExecutionTime 存储为INT, 但支持使用EpochTime（以纳秒为单位）和RFC3339格式的字符串的查询（例如“ 2006-01-02T15：04：05 + 07：00”）
 - CloseTime, HistoryLength 仅存在于关闭的工作流中
-- ExecutionTime 供 Retry / Cron 用户查询将来将要运行的工作流程
+- ExecutionTime 供 Retry / Cron 用户查询将来将要运行的工作流
 
 要仅列出打开的工作流，请添加`CloseTime = missing`到查询末尾。
 
-如果使用重试或 cron 功能查询将在特定时间范围内开始执行的工作流，则可以在 ExecutionTime 上添加限制。例如：`ExecutionTime > 2019-01-01T10:00:00-07:00`。请注意，如果包含有 ExecutionTime 的限制，则仅返回 cron 或需要重试的工作流程。
+如果使用重试或 cron 功能查询将在特定时间范围内开始执行的工作流，则可以在 ExecutionTime 上添加限制。例如：`ExecutionTime > 2019-01-01T10:00:00-07:00`。请注意，如果包含有 ExecutionTime 的限制，则仅返回 cron 或需要重试的工作流。
 
 If you use retry or the cron feature to query workflows that will start execution in a certain time range, you can add predicates on ExecutionTime. For example: `ExecutionTime > 2019-01-01T10:00:00-07:00`. Note that if predicates on ExecutionTime are included, only cron or a workflow that needs to retry will be returned.
 
