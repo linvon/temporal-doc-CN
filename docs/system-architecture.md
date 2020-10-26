@@ -11,7 +11,7 @@ Temporal 是一个高度可伸缩的，故障无感知的有状态的代码平�
 
 ## 临时服务
 
-![时间总览](https://docs.temporal.io/img/docs/learn-topology-overview.png)
+![时间总览](../img/docs/system-architecture.png)
 
 Temporal 的核心是高度可扩展的多租户服务。该服务通过强类型的 [Proto API](https://github.com/temporalio/temporal-proto/blob/master/workflowservice/service.proto) 暴露其所有功能。
 
@@ -21,7 +21,7 @@ Temporal 服务负责保持工作流状态和相关的持久化计时器。它�
 
 Temporal 服务是多租户的。因此可以实现不同用例的多个 Worker 池连接到同一服务实例。例如在Uber，一百多个应用程序使用了一项服务。同时，一些外部客户端为每个应用程序部署了一个 Temporal 服务实例。对于本地开发，可以使用通过 docker-compose 配置的本地 Temporal 服务实例。
 
-![时间总览](https://docs.temporal.io/img/docs/temporal-overview.svg)
+![时间总览](../img/docs/system-architecture-2.png)
 
 ## 工作流  Worker 
 

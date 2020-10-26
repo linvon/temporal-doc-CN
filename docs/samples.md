@@ -1,6 +1,8 @@
+这里主要是描述 [Go SDK samples](https://github.com/temporalio/samples-go) 中各个样例主要使用了什么特性，方便有需要的朋友想要了解相关特性时快速查找样例
+
 - branch
 
-  异步运行多个活动，最后一起收集结果，类似于 WaitGroup
+  异步运行多个活动，最后一起使用 Future 收集结果，类似于 WaitGroup
 
 - cancelactivity
 
@@ -32,7 +34,7 @@
 
 - dsl
 
-  dsl内容
+  dsl 相关内容
 
 - dynamic
 
@@ -68,7 +70,7 @@
 
 - pso
 
-  PSO算法实现
+  PSO 算法实现
 
 - query
 
@@ -88,7 +90,7 @@
 
 - splitmerge
 
-  使用 **workflow.Go** 工作流中并发进行块处理，并使用 channel 汇总结果
+  使用 **workflow.Go** 在工作流中并发进行块读取处理，并使用 channel 汇总结果
 
 - timer
 
