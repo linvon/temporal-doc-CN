@@ -14,7 +14,7 @@ sidebar_label: Run your first app
 
  Temporal  服务和相应的SDK为现代应用程序开发产生的复杂性提供了全面的解决方案。
 
-![](../img/docs/Temporal-server-and-sdk-icons.png)
+![](../img/docs/temporal-server-and-sdk-icons.png)
 
  Temporal  可以被视为一种方法，可以“治愈一切”你在作为开发者开发有依赖的应用程序时所面临的痛苦。 Temporal  提供开箱即用的可靠性原语，例如无缝和容错的应用程序状态跟踪，自动重试，超时，由于过程故障导致的回滚等等。
 
@@ -41,7 +41,7 @@ sidebar_label: Run your first app
 
 这是对流程的高度抽象的图例说明：
 
-![High level project design](../img/docs/Temporal-high-level-application-design.png)
+![High level project design](../img/docs/temporal-high-level-application-design.png)
 
 ### 工作流函数
 
