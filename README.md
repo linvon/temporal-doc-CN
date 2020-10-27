@@ -1,7 +1,8 @@
 # temporal-doc-CN
  Chinese version of Temporal Documentation 
 
-这是中文版本的 Temproal 文档，仅做了介绍、使用和 Go SDK 相关部分的翻译，方式为机翻+人工校正，如发现错误欢迎提PR
+这是中文版本的 [Temproal 文档](https://github.com/temporalio/documentation)，仅做了介绍、使用和 Go SDK 相关部分的翻译，方式为机翻+人工校正，其中有一些超链接可能有问题，还望谅解。
+如发现错误欢迎提PR，同时也欢迎参与贡献
 
 基于 V1.0.0 版本
 
