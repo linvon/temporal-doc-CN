@@ -9,7 +9,7 @@ Temporal 是一个高度可伸缩的，故障无感知的有状态的代码平�
 
 常见的基于 Temporal 的应用程序由 Temporal 服务，工作流 Worker 和活动 Worker 以及外部客户端组成。请注意，两种类型的 Worker 以及外部客户端都是角色之一，并且可以根据需要在单个应用程序进程中并置它们。
 
-## 临时服务
+## Temporal 服务
 
 ![时间总览](../img/docs/system-architecture.png)
 
