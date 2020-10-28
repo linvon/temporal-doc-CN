@@ -55,7 +55,7 @@ func SimpleWorkflow(ctx workflow.Context, value string) error {
 
 让我们解构上面的声明：
 
-- 该函数的第一个参数是 **ctx working.Context**。这是所有工作流功能的必需参数，并且由 Temporal 客户端库用于传递执行 context 。几乎所有可从工作流功能调用的客户端库功能都需要此 **ctx** 参数。该 **context** 参数与 Go 提供的标准的 **context.Context** 概念相同 。**workflow.Context** 和 **context.Context**之间的唯一区别是 **workflow.Context ** 的 **Done()** 函数返回 **workflow.Channel** 而不是标准的 go **chan**。
+- 该函数的第一个参数是 **ctx working.Context**。这是所有工作流功能的必需参数，并且由 Temporal 客户端库用于传递执行 context 。几乎所有可从工作流功能调用的客户端库功能都需要此 **ctx** 参数。该 **context** 参数与 Go 提供的标准的 **context.Context** 概念相同 。**workflow.Context** 和 **context.Context**之间的唯一区别是 **workflow.Context** 的 **Done()** 函数返回 **workflow.Channel** 而不是标准的 go **chan**。
 - 第二个参数 **string** 是自定义工作流参数，可用于在启动时将数据传递到工作流中。工作流可以具有一个或多个这样的参数。工作流函数的所有参数必须可序列化，这实际上意味着参数不能是 channel、函数、可变参数或不安全的指针。
 - 由于仅将错误声明为返回值，因此这意味着工作流不会返回其他数据值。**错误**返回值被用于指示执行过程中遇到一个错误，该工作流应该被终止。
 
@@ -70,8 +70,8 @@ func SimpleWorkflow(ctx workflow.Context, value string) error {
 
 - 工作流代码只能读取和操作本地状态或从 Temporal 客户端库函数作为返回值接收的状态。
 - 除了通过活动调用之外，工作流代码不应与外部系统交互。
-- 工作流代码应仅通过 Temporal 客户端库提供的功能与**时间**进行交互**（例如**，**workflow.Now()**，**workflow.Sleep()**）。
-- 工作流代码不应直接创建 goroutine 并与 goroutines 进行交互，而应使用 Temporal 客户端库提供的功能（例如，**workflow.Go()** 代替 **go**， **workflow.Channel **而不是 **chan**，**workflow.Selector** 而不是 **select**）。
+- 工作流代码应仅通过 Temporal 客户端库提供的功能与**时间**进行交互（例如，**workflow.Now()**，**workflow.Sleep()**）。
+- 工作流代码不应直接创建 goroutine 并与 goroutines 进行交互，而应使用 Temporal 客户端库提供的功能（例如，**workflow.Go()** 代替 **go**， **workflow.Channel** 而不是 **chan**，**workflow.Selector** 而不是 **select**）。
 - 工作流代码应通过 Temporal 客户端库提供的日志器（即 **workflow.GetLogger()**）进行所有日志行为。
 - 工作流代码不应使用 range 在 maps 上进行迭代，因为 maps 迭代的顺序是随机的。
 
@@ -104,4 +104,4 @@ Temporal 客户端库提供了许多函数和类型以替代某些本地 Go 函�
 workflow.Register(SimpleWorkflow)
 ```
 
-此调用实质上是在完全限定的函数名称和实现之间的 Worker 进程中创建了内存映射。从 **init()**函数调用此注册方法是安全的。如果 Worker 收到未知的工作流类型的任务，它将使该任务失败。但是任务失败不会导致整个工作流失败。
+此调用实质上是在完全限定的函数名称和实现之间的 Worker 进程中创建了内存映射。从 **init()** 函数调用此注册方法是安全的。如果 Worker 收到未知的工作流类型的任务，它将使该任务失败。但是任务失败不会导致整个工作流失败。
